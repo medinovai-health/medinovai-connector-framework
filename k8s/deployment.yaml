@@ -1,0 +1,71 @@
+# Reference manifest — medinovai-connector-framework (Tier 2 integration)
+# Align namespace with medinovai-200-repo-deployment-brain routing (integration → services).
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: medinovai-connector-framework
+  namespace: medinovai-services
+  labels:
+    app: medinovai-connector-framework
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: medinovai-connector-framework
+  template:
+    metadata:
+      labels:
+        app: medinovai-connector-framework
+    spec:
+      containers:
+        - name: medinovai-connector-framework
+          image: medinovai-connector-framework:latest
+          imagePullPolicy: Never
+          ports:
+            - containerPort: 8000
+              name: http
+          env:
+            - name: SERVICE_NAME
+              value: medinovai-connector-framework
+            - name: PORT
+              value: "8000"
+            - name: REGISTRY_URL
+              value: "http://medinovai-registry.medinovai:8000"
+            - name: INTEGRATION_GATEWAY_URL
+              value: "http://medinovai-integration-gateway:8000"
+            - name: MOS_SECRETS_PREFIX
+              value: "medinovai/connector-framework"
+          readinessProbe:
+            httpGet:
+              path: /ready
+              port: 8000
+            initialDelaySeconds: 15
+            periodSeconds: 10
+            failureThreshold: 2
+          livenessProbe:
+            httpGet:
+              path: /health
+              port: 8000
+            initialDelaySeconds: 45
+            periodSeconds: 15
+            failureThreshold: 3
+          resources:
+            requests:
+              memory: "64Mi"
+              cpu: "50m"
+            limits:
+              memory: "512Mi"
+              cpu: "500m"
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: medinovai-connector-framework
+  namespace: medinovai-services
+spec:
+  selector:
+    app: medinovai-connector-framework
+  ports:
+    - port: 8000
+      targetPort: 8000
+      name: http

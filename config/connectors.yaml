@@ -1,0 +1,90 @@
+# medinovai-connector-framework — connector configuration (NO SECRETS)
+# Resolve real credentials via medinovai-secrets-manager-bridge at runtime.
+
+version: "1.0.0"
+
+connectors:
+  aws:
+    display_name: "AWS HealthLake"
+    spec_id: aws-healthlake
+    protocol: "FHIR R4 REST"
+    secret_ref: "${MOS_SECRETS_PREFIX}/aws-healthlake/credentials"
+    base_url_env: "MOS_AWS_HEALTHLAKE_FHIR_ENDPOINT"
+    auth_type: "aws_iam_sts"
+    rate_limit_rps: 100
+
+  datavant:
+    display_name: "Datavant"
+    spec_id: datavant
+    protocol: "REST"
+    secret_ref: "${MOS_SECRETS_PREFIX}/datavant/api_key"
+    base_url_env: "MOS_DATAVANT_BASE_URL"
+    auth_type: "api_key"
+    rate_limit_rps: 50
+
+  trinetx:
+    display_name: "TriNetX"
+    spec_id: trinetx
+    protocol: "REST"
+    secret_ref: "${MOS_SECRETS_PREFIX}/trinetx/oauth"
+    base_url_env: "MOS_TRINETX_BASE_URL"
+    auth_type: "oauth2"
+    rate_limit_per_minute: 10
+
+  n3c:
+    display_name: "NCATS N3C"
+    spec_id: n3c
+    protocol: "Enclave API"
+    secret_ref: "${MOS_SECRETS_PREFIX}/n3c/nih_credentials"
+    base_url_env: "MOS_N3C_ENCLAVE_URL"
+    auth_type: "nih_2fa"
+    rate_limit_note: "governed_by_n3c"
+
+  pcornet:
+    display_name: "PCORnet"
+    spec_id: pcornet
+    protocol: "CDM v7 SQL"
+    secret_ref: "${MOS_SECRETS_PREFIX}/pcornet/site_vpn"
+    base_url_env: "MOS_PCORNET_COORDINATING_CENTER_URL"
+    auth_type: "site_vpn"
+    rate_limit_note: "site_dependent"
+
+  mayo:
+    display_name: "Mayo Clinic Platform"
+    spec_id: mayo-mcp
+    protocol: "OMOP Enclave"
+    secret_ref: "${MOS_SECRETS_PREFIX}/mayo-mcp/institutional"
+    base_url_env: "MOS_MAYO_MCP_BASE_URL"
+    auth_type: "institutional_agreement"
+    rate_limit_note: "governed_by_mcp"
+
+  azure:
+    display_name: "Azure Health Data Services"
+    spec_id: azure-hds
+    protocol: "FHIR R4 REST"
+    secret_ref: "${MOS_SECRETS_PREFIX}/azure-hds/service_principal"
+    base_url_env: "MOS_AZURE_HDS_FHIR_ENDPOINT"
+    auth_type: "azure_ad_managed_identity"
+    rate_limit_rps: 100
+
+  all_of_us:
+    display_name: "NIH All of Us"
+    spec_id: all-of-us
+    protocol: "Workbench API"
+    secret_ref: "${MOS_SECRETS_PREFIX}/all-of-us/workbench"
+    base_url_env: "MOS_ALL_OF_US_WORKBENCH_URL"
+    auth_type: "nih_workspace"
+    rate_limit_note: "governed_by_workbench"
+
+# Masked credential shape (for documentation only — not real values)
+credential_shapes:
+  aws_healthlake:
+    role_arn: "arn:aws:iam::************:role/********"
+    region: "us-east-1"
+  datavant:
+    api_key: "********"
+  trinetx:
+    client_id: "********"
+    client_secret: "********"
+  generic_oauth:
+    token_url: "https://********/oauth/token"

@@ -1,0 +1,21 @@
+=== MedinovAI Harness 2.1 — Progress Log ===
+Repo: medinovai-connector-framework
+Tier: 2
+Initialized: 2026-03-30
+Total Features: 55
+Features Completed: 0
+Features Remaining: 55
+
+--- SESSION 0 (Initializer) ---
+Date: 2026-03-30T00:00:00Z
+Model: agent-scaffold
+Actions:
+  - CLAUDE.md written (Harness 2.1 Section 9 template, Tier 2)
+  - init.sh written for Python 3.11 / FastAPI
+  - feature_list.json written (55 features)
+  - src/connectors/* scaffold (8 platforms + base + registry)
+  - src/api routes: /health, /ready, /health/{platform}, /ingest/{platform}, /connectors
+  - config/connectors.yaml, .env.example, Dockerfile, docker-compose.yml
+  - .claude/settings.json and commands/*.md
+Status: COMPLETE
+Next Session: Pick F001 — Implement AWS HealthLake SigV4 client and real health_check against sandbox

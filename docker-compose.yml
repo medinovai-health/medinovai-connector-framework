@@ -1,0 +1,28 @@
+# medinovai-connector-framework — local / platform compose
+# Integration: set INTEGRATION_GATEWAY_URL to medinovai-integration-gateway service.
+# Typical pattern: attach both services to the same Docker network as the gateway
+# (e.g. external network "medinovai-integration") once that stack is up.
+
+services:
+  medinovai-connector-framework:
+    build: .
+    image: medinovai-connector-framework:latest
+    container_name: medinovai-connector-framework
+    ports:
+      - "8012:8000"
+    environment:
+      PORT: "8000"
+      SERVICE_NAME: medinovai-connector-framework
+      REGISTRY_URL: ${REGISTRY_URL:-http://medinovai-registry.medinovai:8000}
+      INTEGRATION_GATEWAY_URL: ${INTEGRATION_GATEWAY_URL:-http://medinovai-integration-gateway:8000}
+      MOS_SECRETS_PREFIX: ${MOS_SECRETS_PREFIX:-medinovai/connector-framework}
+      MOS_LOG_LEVEL: ${MOS_LOG_LEVEL:-INFO}
+    volumes:
+      - ./config:/app/config:ro
+    # Uncomment when the integration gateway stack defines this network:
+    # networks:
+    #   - medinovai-integration
+
+# networks:
+#   medinovai-integration:
+#     external: true
